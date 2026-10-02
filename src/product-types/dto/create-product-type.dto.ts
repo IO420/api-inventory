@@ -1,1 +1,8 @@
-export class CreateProductTypeDto {}
+import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
+
+export class CreateProductTypeDto {
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(255)
+  name: string;
+}
