@@ -19,12 +19,25 @@ export class UnitsService {
     return this.unitRepository.findOne({ where: { name } });
   }
 
+  findOneByAbreviation(abbreviation: string) {
+    return this.unitRepository.findOne({ where: { abbreviation } });
+  }
+
   async create(unit: CreateUnitDto) {
-    const found = await this.findOneByName(unit.name);
+    const [found, found2] = await Promise.all([
+      this.findOneByName(unit.name),
+      this.findOneByAbreviation(unit.abbreviation),
+    ]);
 
     if (found) {
       throw new ConflictException(
         `The unit name: "${unit.name}" already exist.`,
+      );
+    }
+
+    if (found2) {
+      throw new ConflictException(
+        `The abreviation name: "${unit.abbreviation}" already exist.`,
       );
     }
 

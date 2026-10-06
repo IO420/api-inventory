@@ -1,4 +1,4 @@
-import { Category } from '@/categories/entities/category.entity';
+// import { Category } from '@/categories/entities/category.entity';
 import { ProductType } from '@/product-types/entities/product-type.entity';
 import { Unit } from '@/units/entities/unit.entity';
 import {
@@ -18,26 +18,29 @@ export class Product {
   @PrimaryGeneratedColumn()
   id_product: number;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'int', nullable: false })
   id_product_type: number;
 
-  @Column({ type: 'int' })
-  id_category: number;
+  // @Column({ type: 'int' })
+  // id_category: number;
 
-  @Column({ name: 'id_unit', type: 'int' })
+  @Column({ name: 'id_unit', type: 'int', nullable: false })
   id_unit: number;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: 'varchar', length: 255, nullable: false })
   name: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 100, nullable: true })
   sku: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   image: string;
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ type: 'varchar', length: 255, nullable: true })
   description: string;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  brand: string | null;
 
   @Column({ type: 'boolean', default: true })
   active: boolean;
@@ -52,9 +55,9 @@ export class Product {
   @JoinColumn({ name: 'id_product_type' })
   productType: ProductType;
 
-  @ManyToOne(() => Category, { onDelete: 'RESTRICT' })
-  @JoinColumn({ name: 'id_category' })
-  category: Category;
+  // @ManyToOne(() => Category, { onDelete: 'RESTRICT' })
+  // @JoinColumn({ name: 'id_category' })
+  // category: Category;
 
   @ManyToOne(() => Unit, { onDelete: 'RESTRICT' })
   @JoinColumn({ name: 'id_unit' })

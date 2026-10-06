@@ -5,8 +5,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ProductsModule } from './products/products.module';
 import { ProductTypesModule } from './product-types/product-types.module';
-import { CategoriesModule } from './categories/categories.module';
+// import { CategoriesModule } from './categories/categories.module';
 import { UnitsModule } from './units/units.module';
+import { OperationsModule } from './operations/operations.module';
+import { InventoryModule } from './inventory/inventory.module';
+import { BranchesModule } from './branches/branches.module';
 
 @Module({
   imports: [
@@ -32,7 +35,7 @@ import { UnitsModule } from './units/units.module';
           username: configService.get<string>('api_db_username'),
           password: configService.get<string>('api_db_password'),
           database: configService.get<string>('api_db_database'),
-          synchronize: true,
+          synchronize: false,
           dropSchema: false,
           autoLoadEntities: true,
           timezone: '+00:00',
@@ -41,8 +44,11 @@ import { UnitsModule } from './units/units.module';
     }),
     ProductsModule,
     ProductTypesModule,
-    CategoriesModule,
+    // CategoriesModule,
     UnitsModule,
+    OperationsModule,
+    InventoryModule,
+    BranchesModule
   ],
   controllers: [AppController],
   providers: [AppService],

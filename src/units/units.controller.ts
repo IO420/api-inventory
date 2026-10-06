@@ -11,8 +11,8 @@ export class UnitsController {
     return this.unitsService.findAll();
   }
 
-      @Post()
-      create(@Body() data: CreateUnitDto) {
-        return this.unitsService.create(data);
-      }
+  @Post()
+  create(@Body() data: CreateUnitDto) {
+    return this.unitsService.create(data);
+  }
 }

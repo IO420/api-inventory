@@ -3,6 +3,7 @@ import {
   IsInt,
   IsNotEmpty,
   IsNumber,
+  IsNumberString,
   IsOptional,
   IsString,
   MaxLength,
@@ -14,16 +15,18 @@ export class CreateProductDto {
   @Type(() => Number)
   @IsInt()
   @Min(1)
+  @IsNotEmpty()
   id_product_type: number;
 
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  id_category: number;
+  // @Type(() => Number)
+  // @IsInt()
+  // @Min(1)
+  // id_category: number;
 
   @Type(() => Number)
   @IsInt()
   @Min(1)
+  @IsNotEmpty()
   id_unit: number;
 
   @IsString()
@@ -33,6 +36,11 @@ export class CreateProductDto {
 
   @IsString()
   @IsNotEmpty()
+  @MaxLength(255)
+  brand: string;
+
+  @IsString()
+  @IsOptional()
   @MaxLength(100)
   sku: string;
 
@@ -48,4 +56,10 @@ export class CreateProductDto {
   @IsOptional()
   @IsBoolean()
   active?: boolean;
+}
+
+export class UploadExcelDto {
+  @IsOptional()
+  @IsNumberString()
+  id_branch?: string;
 }
