@@ -34,12 +34,16 @@ export class OperationsService {
 
     if (rows.length < 2) {
       return {
-        message: 'excel whithot data',
+        message: 'El archivo Excel no contiene datos válidos',
       };
     }
 
     const dataRows = rows.slice(1);
-    const meiliDocuments: { id: number; name: string; brand: string }[] = [];
+
+    const meiliUpdatesMap = new Map<
+      number,
+      { id: number; name: string; brand: string; quantity: number }
+    >();
     let processedCount = 0;
 
     const queryRunner = this.dataSource.createQueryRunner();
@@ -98,11 +102,11 @@ export class OperationsService {
         }
         await queryRunner.manager.save(invItem);
 
-        // D. Preparar datos para Meilisearch
-        meiliDocuments.push({
+        meiliUpdatesMap.set(product.id_product, {
           id: product.id_product,
           name: product.name,
           brand: product.brand || '',
+          quantity,
         });
 
         processedCount++;
@@ -112,26 +116,63 @@ export class OperationsService {
     } catch (error) {
       await queryRunner.rollbackTransaction();
       throw new InternalServerErrorException(
-        `Error al procesar el archivo Excel: ${error.message}`,
+        `Error to process excel: ${error.message}`,
       );
     } finally {
       await queryRunner.release();
     }
 
-    if (meiliDocuments.length > 0) {
+    interface MeiliProductDocument {
+      id: number;
+      name: string;
+      brand: string;
+      branches_with_stock: number[];
+    }
+
+    if (meiliUpdatesMap.size > 0) {
       try {
         const index = this.meiliClient.index('products');
-        await index.addDocuments(meiliDocuments, { primaryKey: 'id' });
+
+        const meiliDocumentsToPush: MeiliProductDocument[] = [];
+
+        for (const [productId, item] of meiliUpdatesMap.entries()) {
+          let currentBranches: number[] = [];
+
+          try {
+            const existingDoc =
+              await index.getDocument<MeiliProductDocument>(productId);
+            currentBranches = existingDoc.branches_with_stock || [];
+          } catch (e) {
+            currentBranches = [];
+          }
+
+          if (item.quantity > 0) {
+            if (!currentBranches.includes(branchId)) {
+              currentBranches.push(branchId);
+            }
+          } else {
+            currentBranches = currentBranches.filter((b) => b !== branchId);
+          }
+
+          meiliDocumentsToPush.push({
+            id: item.id,
+            name: item.name,
+            brand: item.brand,
+            branches_with_stock: currentBranches,
+          });
+        }
+
+        await index.updateDocuments(meiliDocumentsToPush, { primaryKey: 'id' });
       } catch (meiliError) {
         console.error(
-          'Error al sincronizar con Meilisearch:',
+          'Error whit Meilisearch:',
           meiliError.message,
         );
       }
     }
 
     return {
-      message: 'Carga masiva completada con éxito',
+      message: 'success',
       totalProcessed: processedCount,
       branchIdAssigned: branchId,
     };

@@ -27,7 +27,7 @@ export class Product {
   @Column({ name: 'id_unit', type: 'int', nullable: false })
   id_unit: number;
 
-  @Column({ type: 'varchar', length: 255, nullable: false })
+  @Column({ type: 'varchar', length: 600, nullable: false })
   name: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
@@ -52,7 +52,10 @@ export class Product {
   updatedAt: Date;
 
   @ManyToOne(() => ProductType, { onDelete: 'RESTRICT' })
-  @JoinColumn({ name: 'id_product_type' })
+  @JoinColumn({
+    name: 'id_product_type',
+    foreignKeyConstraintName: 'fk_product_product_type',
+  })
   productType: ProductType;
 
   // @ManyToOne(() => Category, { onDelete: 'RESTRICT' })
@@ -60,6 +63,6 @@ export class Product {
   // category: Category;
 
   @ManyToOne(() => Unit, { onDelete: 'RESTRICT' })
-  @JoinColumn({ name: 'id_unit' })
+  @JoinColumn({ name: 'id_unit', foreignKeyConstraintName: 'fk_product_unit' })
   unit: Unit;
 }

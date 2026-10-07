@@ -7,13 +7,11 @@ import {
   Param,
   BadRequestException,
   ParseIntPipe,
-  UseInterceptors,
-  UploadedFile,
+  Delete,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto, UploadExcelDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('products')
 export class ProductsController {
@@ -47,4 +45,9 @@ export class ProductsController {
   update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
     return this.productsService.update(+id, updateProductDto);
   }
+
+  // @Delete('meiliSearch')
+  // deleteProuctMeiliSearch(){
+  //   return this.productsService.deleteAllProducts()
+  // }
 }

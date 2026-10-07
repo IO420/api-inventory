@@ -15,7 +15,7 @@ export class OperationsController {
     ) {
       if (!file) {
         throw new BadRequestException(
-          'Es necesario adjuntar un archivo Excel (.xlsx)',
+          'You need to add te file (.xlsx)',
         );
       }
   

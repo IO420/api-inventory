@@ -46,10 +46,16 @@ export class Inventory {
   updated_at: Date;
 
   @ManyToOne(() => Branch, { onDelete: 'RESTRICT', onUpdate: 'CASCADE' })
-  @JoinColumn({ name: 'id_branch' })
+  @JoinColumn({
+    name: 'id_branch',
+    foreignKeyConstraintName: 'fk_inventory_branch',
+  })
   branch: Branch;
 
   @ManyToOne(() => Product, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
-  @JoinColumn({ name: 'id_product' })
+  @JoinColumn({
+    name: 'id_product',
+    foreignKeyConstraintName: 'fk_inventory_product',
+  })
   product: Product;
 }

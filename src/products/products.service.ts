@@ -34,11 +34,12 @@ export class ProductsService implements OnModuleInit {
         'description',
         'sku',
       ]);
+      await index.updateFilterableAttributes(['branches_with_stock']);
 
       console.log('[ProductsService] Conexión exitosa con Meilisearch');
     } catch (error) {
       console.warn(
-        '[ProductsService] Advertencia: No se pudo conectar con Meilisearch. Asegúrate de tener el servidor encendido.',
+        '[ProductsService] warning: cant connect whit meiliSearch.',
       );
     }
   }
@@ -92,10 +93,11 @@ export class ProductsService implements OnModuleInit {
           brand: savedProduct.brand,
           sku: savedProduct.sku,
           description: savedProduct.description,
+          branches_with_stock: [],
         },
       ]);
     } catch (error) {
-      console.warn('[Meilisearch] No se pudo indexar el producto creado.');
+      console.warn('[Meilisearch] cant create the product.');
     }
 
     return savedProduct;
@@ -111,7 +113,7 @@ export class ProductsService implements OnModuleInit {
       return searchResult.hits;
     } catch (error) {
       console.warn(
-        '[Meilisearch] Error en búsqueda, fall-back a base de datos.',
+        '[Meilisearch] Error in search.',
       );
       return [];
     }
@@ -139,11 +141,21 @@ export class ProductsService implements OnModuleInit {
           },
         ]);
       } catch (error) {
-        console.warn('[Meilisearch] No se pudo actualizar el índice.');
+        console.warn('[Meilisearch] cant update.');
       }
     }
 
     return updatedProduct;
+  }
+
+  async deleteAllProducts() {
+    try {
+      const index = this.meiliClient.index('products');
+      await index.deleteAllDocuments();
+      console.log('[Meilisearch] cleand.');
+    } catch (error) {
+      console.error('[Meilisearch] Error to delete:', error.message);
+    }
   }
 }
 //IO
