@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { InventoryService } from './inventory.service';
@@ -12,14 +13,18 @@ import { JwtAuthGuard } from '@/operations/jwt-auth.guard';
 export class InventoryController {
   constructor(private readonly inventoryService: InventoryService) {}
 
-  //just to test adding id_brach param,but its will change
   @UseGuards(JwtAuthGuard)
-  @Get('search/:id_branch/:name')
-  search(@Param('id_branch') id_branch: string, @Param('name') name: string) {
+  @Get('search/:name')
+  async search(@Param('name') name: string, @Req() req: any) {
     if (!name || name.trim() === '') {
       throw new BadRequestException('you cant search nothing');
     }
+    const id_branch = req.user.branch;
 
-    return this.inventoryService.searchByName(name.trim(), +id_branch);
+    const data = await this.inventoryService.searchByName(
+      name.trim(),
+      id_branch,
+    );
+    return data;
   }
 }

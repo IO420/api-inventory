@@ -36,7 +36,7 @@ export class ProductsService implements OnModuleInit {
       ]);
       await index.updateFilterableAttributes(['branches_with_stock']);
 
-      console.log('[ProductsService] Conexión exitosa con Meilisearch');
+      console.log('[ProductsService] Successful connection with Meilisearch');
     } catch (error) {
       console.warn(
         '[ProductsService] warning: cant connect whit meiliSearch.',
