@@ -57,12 +57,14 @@ export class InventoryService {
 
           return {
             id_product: hit.id,
-            name: inv.product?.name ?? hit.name,
-            brand: inv.product?.brand ?? hit.brand,
+            name: inv.product?.name,
+            brand: inv.product?.brand,
             location: inv.ubication ?? '',
             quantity: Number(inv.quantity),
             minimum_stock: Number(inv.minimum_stock),
+            price: Number(inv.price),
             id_branch: inv.id_branch,
+            image: `${this.configService.get<string>('api_db_host')} ${inv.product.image}`,
           };
         })
         .filter(Boolean);

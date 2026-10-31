@@ -10,12 +10,18 @@ import { UnitsModule } from './units/units.module';
 import { OperationsModule } from './operations/operations.module';
 import { InventoryModule } from './inventory/inventory.module';
 import { BranchesModule } from './branches/branches.module';
+import { join } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'imageProducts'),
+      serveRoot: '/uploads',
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
@@ -35,7 +41,7 @@ import { BranchesModule } from './branches/branches.module';
           username: configService.get<string>('api_db_username'),
           password: configService.get<string>('api_db_password'),
           database: configService.get<string>('api_db_database'),
-          synchronize: false,
+          synchronize: true,
           dropSchema: false,
           autoLoadEntities: true,
           timezone: '+00:00',

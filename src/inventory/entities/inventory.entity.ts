@@ -16,28 +16,29 @@ export class Inventory {
   @PrimaryGeneratedColumn({ name: 'id_inventory' })
   id_inventory: number;
 
-  @Column({ name: 'id_branch', type: 'int' })
+  @Column({ type: 'int' })
   id_branch: number;
 
-  @Column({ name: 'id_product', type: 'int' })
+  @Column({ type: 'int' })
   id_product: number;
 
   @Column({
-    type: 'decimal',
-    precision: 10,
-    scale: 2,
+    type: 'int',
     default: 0,
   })
   quantity: number;
 
   @Column({
-    name: 'minimum_stock',
-    type: 'decimal',
-    precision: 10,
-    scale: 2,
+    type: 'int',
     default: 0,
   })
   minimum_stock: number;
+
+  @Column({
+    type: 'int',
+    default: 0,
+  })
+  price: number;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   ubication: string;
