@@ -21,7 +21,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'imageProducts'),
-      serveRoot: '/uploads',
+      serveRoot: '/imageProducts',
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],

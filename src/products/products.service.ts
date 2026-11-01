@@ -153,7 +153,7 @@ export class ProductsService implements OnModuleInit {
       const index = this.meiliClient.index('products');
       await index.deleteAllDocuments();
       console.log('[Meilisearch] cleand.');
-    } catch (error) {
+    } catch (error:any) {
       console.error('[Meilisearch] Error to delete:', error.message);
     }
   }

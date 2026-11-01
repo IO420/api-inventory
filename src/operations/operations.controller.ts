@@ -2,6 +2,7 @@ import { BadRequestException, Body, Controller, Post, UploadedFile, UseIntercept
 import { OperationsService } from './operations.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadExcelDto } from '@/products/dto/create-product.dto';
+import type {} from 'multer';
 
 @Controller('operations')
 export class OperationsController {

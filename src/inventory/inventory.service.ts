@@ -64,12 +64,14 @@ export class InventoryService {
             minimum_stock: Number(inv.minimum_stock),
             price: Number(inv.price),
             id_branch: inv.id_branch,
-            image: `${this.configService.get<string>('api_db_host')} ${inv.product.image}`,
+            image: inv.product.image
+              ? `${this.configService.get<string>('ASSETS_PATH')}/imageProducts/${encodeURIComponent(inv.product.image)}`
+              : null,
           };
         })
         .filter(Boolean);
       return formattedResults;
-    } catch (error) {
+    } catch (error: any) {
       console.warn('[Meilisearch / Inventory] Error searching:', error.message);
       return [];
     }

@@ -113,7 +113,7 @@ export class OperationsService {
       }
 
       await queryRunner.commitTransaction();
-    } catch (error) {
+    } catch (error:any) {
       await queryRunner.rollbackTransaction();
       throw new InternalServerErrorException(
         `Error to process excel: ${error.message}`,
@@ -163,7 +163,7 @@ export class OperationsService {
         }
 
         await index.updateDocuments(meiliDocumentsToPush, { primaryKey: 'id' });
-      } catch (meiliError) {
+      } catch (meiliError:any) {
         console.error(
           'Error whit Meilisearch:',
           meiliError.message,
