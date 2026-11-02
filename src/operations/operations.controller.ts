@@ -1,13 +1,15 @@
-import { BadRequestException, Body, Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { OperationsService } from './operations.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadExcelDto } from '@/products/dto/create-product.dto';
 import type {} from 'multer';
+import { JwtAuthGuard } from './jwt-auth.guard';
 
 @Controller('operations')
 export class OperationsController {
   constructor(private readonly operationsService: OperationsService) {}
 
+    @UseGuards(JwtAuthGuard)
     @Post('upload-excel')
     @UseInterceptors(FileInterceptor('file'))
     async uploadExcel(
