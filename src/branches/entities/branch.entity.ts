@@ -25,4 +25,7 @@ export class Branch {
 
   @UpdateDateColumn({ type: 'timestamp', name: 'updated_at' })
   updatedAt: Date;
+
+  @Column({ type: 'int', name: 'id_organization' })
+  id_organization: number;
 }

@@ -4,6 +4,7 @@ import { Inventory } from './entities/inventory.entity';
 import { In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import MeiliSearch from 'meilisearch';
+import { count } from 'console';
 
 @Injectable()
 export class InventoryService {
@@ -75,6 +76,18 @@ export class InventoryService {
       console.warn('[Meilisearch / Inventory] Error searching:', error.message);
       return [];
     }
+  }
+
+  async inventory(id_branch: number) {
+    return await this.inventoryRepository.countBy({ id_branch });
+  }
+
+  async countLowStockProducts(id_branch: number): Promise<number> {
+    return await this.inventoryRepository
+      .createQueryBuilder('inventory')
+      .where('inventory.id_branch = :id_branch', { id_branch })
+      .andWhere('inventory.quantity < inventory.minimum_stock')
+      .getCount();
   }
 }
 //IO
