@@ -46,7 +46,15 @@ export class InventoryController {
   @UseGuards(JwtAuthGuard)
   @Get('low-stock')
   async getLowStockCount(@Req() req: { user: AuthenticatedUser }) {
-    const count = await this.inventoryService.countLowStockProducts(req.user.branch);
+    const count = await this.inventoryService.countLowStockProducts(
+      req.user.branch,
+    );
     return count;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/:id')
+  async product(@Param('id') id: number) {
+    return this.inventoryService.product(id);
   }
 }

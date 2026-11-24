@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Inventory } from './entities/inventory.entity';
-import { In, Repository } from 'typeorm';
+import { In, MoreThan, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import MeiliSearch from 'meilisearch';
-import { count } from 'console';
 
 @Injectable()
 export class InventoryService {
@@ -79,7 +78,10 @@ export class InventoryService {
   }
 
   async inventory(id_branch: number) {
-    return await this.inventoryRepository.countBy({ id_branch });
+    return await this.inventoryRepository.countBy({
+      id_branch,
+      quantity: MoreThan(0),
+    });
   }
 
   async countLowStockProducts(id_branch: number): Promise<number> {
@@ -88,6 +90,13 @@ export class InventoryService {
       .where('inventory.id_branch = :id_branch', { id_branch })
       .andWhere('inventory.quantity < inventory.minimum_stock')
       .getCount();
+  }
+
+  async product(id_product: number) {
+    return this.inventoryRepository.findOne({
+      where: { id_product },
+      relations: { product: true },
+    });
   }
 }
 //IO
